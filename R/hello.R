@@ -1,18 +1,27 @@
-# Hello, world!
-#
-# This is an example function named 'hello' 
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   https://r-pkgs.org
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Install Package:           'Ctrl + Shift + B'
-#   Check Package:             'Ctrl + Shift + E'
-#   Test Package:              'Ctrl + Shift + T'
+library(Lahman)
+library(dplyr)
 
-hello <- function() {
-  print("Hello, world!")
+
+
+getPID <- function(name) {
+  first_last<- unlist(strsplit(name, split=" "))
+  first <- first_last[1]
+  last <- first_last[2]
+  return(People[People$nameFirst == first & People$nameLast == last, 1])
 }
+
+getPID("Wilyer Abreu")
+
+Batting %>% group_by(playerID) %>%
+  summarize(
+    teams = strsplit(paste(sort(unique(teamID)), collapse=" "), split=" ")
+  )
+
+Batting <- function(pid) {
+  return(subset(Lahman::Batting, playerID == pid))
+}
+Batting(getPID("Dansby Swanson"))
+Batting
+
+Teams$name
+min(Batting$yearID)
