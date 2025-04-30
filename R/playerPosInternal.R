@@ -1,65 +1,24 @@
-# For use internally to apply a "position" column to dataframes
+# Used to generate the PrimaryPositions table, useful to join positions to a player/year/team combo in a vectorized way
 
-# playerPosInternal <- function(data, players = NULL, years = c(1871, 2023), teams = NULL, lg = NULL) {
-#   if (is.null(players)) players <- unique(data$playerID)
-#   if (is.null(teams)) teams <- unique(data$teamID)
-#   if (is.null(lg)) lg <- unique(data$lgID)
-#
-#   # Combine fielding positions
-#   fielding_main <- Lahman::Fielding %>%
-#     dplyr::filter(playerID %in% players,
-#                   yearID >= years[1] & yearID <= years[2],
-#                   teamID %in% teams, lgID %in% lg) %>%
-#     dplyr::group_by(playerID, POS) %>%
-#     dplyr::summarise(totalG = sum(G), .groups = "drop")
-#
-#   fielding_of <- Lahman::FieldingOFsplit %>%
-#     dplyr::filter(playerID %in% players,
-#                   yearID >= years[1] & yearID <= years[2],
-#                   teamID %in% teams, lgID %in% lg) %>%
-#     dplyr::group_by(playerID, POS) %>%
-#     dplyr::summarise(totalG = sum(G), .groups = "drop")
-#
-#   # Combine both, excluding generic OF
-#   all_pos <- dplyr::bind_rows(fielding_main, fielding_of) %>%
-#     dplyr::filter(POS != "OF") %>%
-#     dplyr::group_by(playerID, POS) %>%
-#     dplyr::summarise(totalG = sum(totalG), .groups = "drop") %>%
-#     dplyr::arrange(playerID, -totalG) %>%
-#     dplyr::group_by(playerID) %>%
-#     dplyr::slice(1) %>%  # get top position
-#     dplyr::ungroup()
-#
-#   return(all_pos)  # A dataframe: playerID, POS
-# }
+playerPosX <- function() {
+  fielding_m <- Lahman::Fielding %>% group_by(playerID, yearID, teamID, POS) %>%
+    dplyr::summarise(gamesAtPos = sum(G), .groups = "drop")
 
-playerPosInternal <- function(data) {
-  # Get the unique combinations of playerID, yearID, and teamID from the input data
-  keys <- data %>%
-    dplyr::select(playerID, yearID, teamID) %>%
-    dplyr::distinct()
-
-  # Filter and aggregate games by position from the main Fielding table
-  fielding_main <- Lahman::Fielding %>%
-    dplyr::inner_join(keys, by = c("playerID", "yearID", "teamID")) %>%
-    dplyr::group_by(playerID, yearID, teamID, POS) %>%
-    dplyr::summarise(totalG = sum(G), .groups = "drop")
-
-  # Same for FieldingOFsplit
   fielding_of <- Lahman::FieldingOFsplit %>%
-    dplyr::inner_join(keys, by = c("playerID", "yearID", "teamID")) %>%
     dplyr::group_by(playerID, yearID, teamID, POS) %>%
-    dplyr::summarise(totalG = sum(G), .groups = "drop")
+    dplyr::summarise(gamesAtPos = sum(G), .groups = "drop")
 
-  # Combine, remove generic OF, and select top position per player
-  all_pos <- dplyr::bind_rows(fielding_main, fielding_of) %>%
-    dplyr::filter(POS != "OF") %>%
+  all_pos <- bind_rows(fielding_m, fielding_of) %>%
     dplyr::group_by(playerID, yearID, teamID, POS) %>%
-    dplyr::summarise(totalG = sum(totalG), .groups = "drop") %>%
-    dplyr::arrange(playerID, -totalG) %>%
-    dplyr::group_by(playerID) %>%
-    dplyr::slice(1) %>%
+    dplyr::summarise(gamesAtPos = sum(gamesAtPos), .groups = "drop")
+
+  primary_pos <- all_pos %>%
+    dplyr::filter(POS != "OF") %>%
+    dplyr::group_by(playerID, yearID, teamID) %>%
+    dplyr::slice_max(order_by = gamesAtPos, n = 1, with_ties = FALSE) %>%
     dplyr::ungroup()
 
-  return(all_pos)  # Returns a data frame: playerID, POS
+  return(primary_pos)
 }
+# PrimaryPositions <- playerPosX()
+

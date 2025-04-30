@@ -8,12 +8,10 @@ This package adds functions to the [Sean Lahman Baseball Database Package,](http
               teams = unique(data\$teamID),\
               lg = unique(data\$lgID),\
               pos = c("P", "LF", "CF", "RF", "2B", "3B", "1B", "SS", "C"),\
-              post = 0,\
               idvars = colnames(data)])**\
         Returns the table given in *data* (likely one of `Batting`, `Fielding`, or `Pitching`; must include appropriate column names) as filtered by the passed-in arguments, all of which are optional. Designed to quickly prepare tables for analysis, providing filtration, selection, and certain joins with just a single line. It offers much greater convenience than the somewhat cumbersome data prep necessary with the base package, allowing analyses to be carried out in an R script just a few lines long.\
         *players*, *teams*, *lg,* and *pos* may be either a single string or a vector of names/teams/leagues/positions; data will be filtered to only include matching. These values should correspond to entries in the database or an error will be thrown.\
         *years* may be either a single value (in which case records are limited to only that year) or a vector of two years, returning records that fall within that range (inclusive).\
-        *post* indicates whether to join the records in *data*'s corresponding postseason table (filtered in the same way); if it is `TRUE` or 1, stats will be summed between both the regular and postseason, and a column `post` will be added indicating whether that player played in the offseason that year. If it is `FALSE` or 0, postseason stats will be excluded. If it is -1, the table will exclude the regular season, providing a filtered subset of only postseason stats.\
         *idvars* is the list of columns to include in the end result (see the same parameter in battingStats in the original package).
 
 2.  **FullStats([exclude = "Pitching",\
