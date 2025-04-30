@@ -16,6 +16,7 @@ Description: This package contains various data manipulation functions to make t
     battingStats() function in the original package.
 Depends: R (>= 3.5.0), Lahman
 Imports: dplyr
-License: GPL
+License: GPL (>= 3)
 LazyData: true
-
+RoxygenNote: 7.3.2
+Encoding: UTF-8

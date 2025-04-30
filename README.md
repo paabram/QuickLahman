@@ -60,7 +60,7 @@ This package adds functions to the [Sean Lahman Baseball Database Package,](http
              [list = FALSE,\
              years = c(1871, 2023))**\
         Given a player's `playerID`, return the positions he played. Eliminates the need to join `Fielding` when considering data by position.\
-        *list* determines whether to include all positions the player played in the given years listed in a string (formatted like `"position1, position2, ...`). If `FALSE`, the function will return the most frequently occurring position.\
+        *list* determines whether to include all positions the player played in the given years as a tibble, including the number of games at each position. If `FALSE`, the function will return the most frequently played position.\
         *years* is what years to include for the given player, either a single value (limiting to only positions played that year) or a vector of two (start, end), including records that fall within that range (inclusive).
 
 10. **eraToYears(startEra,\
