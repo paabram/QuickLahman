@@ -1,7 +1,7 @@
 #' Get the fielding position(s) for a given player
 #'
 #' @param pID The playerID of the player to search
-#' @param list A boolean; if TRUE, function will return a tibble for the player indicating all positions played and the number of games at each position. If FALSE, just returns the most frequently palyed position, Default: FALSE
+#' @param list A boolean; if TRUE, function will return a tibble for the player indicating all positions played and the number of games at each position. If FALSE, just returns the most frequently played position, Default: FALSE
 #' @param years A single year or a vector of (start year, end year) indicating what years to include for the given player
 #'
 #' @returns A string (the player's primary position) or a tibble with POS and totalG columns

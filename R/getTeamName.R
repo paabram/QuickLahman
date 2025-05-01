@@ -20,7 +20,11 @@ getTeamName <- function(teamID, most_recent = TRUE) {
   } else {
     # there is an entry for every year per franchise, unique() ensures a simple list of team aliases
     if (most_recent)
-      return(unique(name)[-1]) # return the last name in the list (most recent team name)
+      # -1 index doesn't work for vector of size 1
+      if (length(unique(name)[-1]) == 0)
+        return(unique(name))
+      else
+        return(unique(name)[-1]) # return the last name in the list (most recent team name)
     else
       return(unique(name))
   }

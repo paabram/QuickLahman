@@ -17,10 +17,10 @@
 getPlayerID <- function(name) {
   # split the given name on space
   first_last<- unlist(strsplit(name, split=" "))
-  first <- stringr::str_to_title(first_last[1])
-  last <- stringr::str_to_title(first_last[2])
+  first <- stringr::str_to_lower(first_last[1])
+  last <- stringr::str_to_lower(first_last[2])
   # access the playerID (column 1) for the records matching this name
-  pID <- Lahman::People[Lahman::People$nameFirst == first & Lahman::People$nameLast == last, 1]
+  pID <- Lahman::People[stringr::str_to_lower(Lahman::People$nameFirst) == first & stringr::str_to_lower(Lahman::People$nameLast) == last, 1]
   if (length(pID) == 0){
     # if the length of this is 0, no matches were found
     message(sprintf("Error finding player %s in Lahman::People, check your spelling.", name))

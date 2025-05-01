@@ -9,7 +9,7 @@ playerPos(pID, list = FALSE, years = c(1871, 2023))
 \arguments{
 \item{pID}{The playerID of the player to search}
 
-\item{list}{A boolean; if TRUE, function will return a tibble for the player indicating all positions played and the number of games at each position. If FALSE, just returns the most frequently palyed position, Default: FALSE}
+\item{list}{A boolean; if TRUE, function will return a tibble for the player indicating all positions played and the number of games at each position. If FALSE, just returns the most frequently played position, Default: FALSE}
 
 \item{years}{A single year or a vector of (start year, end year) indicating what years to include for the given player}
 }
