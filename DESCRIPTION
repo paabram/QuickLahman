@@ -14,8 +14,7 @@ Description: This package contains various data manipulation functions to make t
     specifically focused on the tables having to do with Major League player 
     statistics. Also adds some functions for stat calculation beyond the 
     battingStats() function in the original package.
-Depends: R (>= 3.5.0), Lahman
-Imports: dplyr
+Depends: R (>= 3.5.0), Lahman, dplyr
 License: GPL (>= 3)
 LazyData: true
 RoxygenNote: 7.3.2
